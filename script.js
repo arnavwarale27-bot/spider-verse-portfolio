@@ -67,36 +67,134 @@
   }
   bindHover();
 
-  // ─── CLICK BURST ───
-  const clickBurstContainer = document.getElementById("click-burst-container");
+  // ─── WEB SHOT (click) ───
+  const NS = "http://www.w3.org/2000/svg";
+
+  function mkEl(tag, attrs, styles) {
+    const el = document.createElementNS(NS, tag);
+    if (attrs) Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+    if (styles) Object.assign(el.style, styles);
+    return el;
+  }
+
   window.addEventListener("click", (e) => {
-    const burst = document.createElement("div");
-    burst.className = "click-burst";
-    burst.style.left = e.clientX + "px";
-    burst.style.top  = e.clientY + "px";
+    const cx = e.clientX, cy = e.clientY;
+    const R         = 130;   // max spoke radius
+    const SPOKES    = 10;    // number of radial threads
+    const RINGS     = 6;     // concentric silk rings
 
-    // 2 expanding rings
-    const ring1 = document.createElement("div"); ring1.className = "cb-ring";
-    const ring2 = document.createElement("div"); ring2.className = "cb-ring-2";
-    // Center dot
-    const dot = document.createElement("div"); dot.className = "cb-dot";
-    burst.appendChild(ring1);
-    burst.appendChild(ring2);
-    burst.appendChild(dot);
+    /* ── Build SVG ── */
+    const svg = mkEl("svg", {
+      viewBox: `-${R} -${R} ${R*2} ${R*2}`,
+      class:   "web-shot-svg",
+    }, {
+      left:   cx + "px",
+      top:    cy + "px",
+      width:  R*2 + "px",
+      height: R*2 + "px",
+      transform: "translate(-50%,-50%)",
+    });
+    document.body.appendChild(svg);
 
-    // 8 web rays at equal angles
-    for (let i = 0; i < 8; i++) {
-      const ray = document.createElement("div");
-      ray.className = "cb-ray";
-      ray.style.transform = `translate(-0%, -50%) rotate(${i * 45}deg)`;
-      ray.style.animationDelay = (i * 0.025) + "s";
-      burst.appendChild(ray);
-    }
+    /* ── Silk shot line — races from bottom-left toward center ── */
+    const shotLen = Math.hypot(R * 1.3, R * 1.1);
+    const shotLine = mkEl("line", {
+      x1: -R * 1.3, y1: R * 1.1, x2: 0, y2: 0
+    }, {
+      stroke: "rgba(255,255,255,0.95)",
+      strokeWidth: "1.1",
+      strokeLinecap: "round",
+      strokeDasharray: shotLen,
+      strokeDashoffset: shotLen,
+    });
+    svg.appendChild(shotLine);
 
-    clickBurstContainer.appendChild(burst);
-    // Remove after animation
-    setTimeout(() => burst.remove(), 800);
+    /* ── Spoke angles with slight organic jitter ── */
+    const baseStep = (Math.PI * 2) / SPOKES;
+    const angles = Array.from({length: SPOKES}, (_, i) =>
+      i * baseStep + (Math.random() - 0.5) * 0.18
+    );
+    /* Spoke lengths — slight variation for realism */
+    const lengths = angles.map(() => R * (0.82 + Math.random() * 0.18));
+
+    /* ── Draw spokes ── */
+    const spokeEls = angles.map((a, i) => {
+      const x2 = Math.cos(a) * lengths[i];
+      const y2 = Math.sin(a) * lengths[i];
+      const segLen = lengths[i];
+      const el = mkEl("line", { x1:0, y1:0, x2, y2 }, {
+        stroke: "rgba(255,255,255,0.88)",
+        strokeWidth: "0.85",
+        strokeLinecap: "round",
+        strokeDasharray: segLen,
+        strokeDashoffset: segLen,
+      });
+      svg.appendChild(el);
+      return { el, segLen };
+    });
+
+    /* ── Draw concentric silk rings ── */
+    const ringEls = Array.from({length: RINGS}, (_, r) => {
+      const ratio = (r + 1) / RINGS;
+      const pts = angles.map((a, i) => {
+        /* Organic sag on each segment — rings aren't perfect polygons */
+        const d = lengths[i] * ratio + (Math.random() - 0.5) * 9;
+        return `${Math.cos(a)*d},${Math.sin(a)*d}`;
+      });
+      pts.push(pts[0]); // close
+
+      /* Each ring slightly thinner and more transparent toward outside */
+      const opacity = 0.82 - r * 0.09;
+      const w       = 0.75 - r * 0.05;
+      const el = mkEl("polyline", { points: pts.join(" ") }, {
+        fill:        "none",
+        stroke:      `rgba(255,255,255,${opacity})`,
+        strokeWidth: Math.max(w, 0.35),
+        opacity:     "0",
+      });
+      svg.appendChild(el);
+      return el;
+    });
+
+    /* ── Center anchor node ── */
+    const node = mkEl("circle", { cx:0, cy:0, r:2.5 }, {
+      fill:    "white",
+      opacity: "0",
+      filter:  "blur(0.5px)",
+    });
+    svg.appendChild(node);
+
+    /* ═══════ ANIMATE ═══════ */
+    /* 1. Shot line races in (130ms) */
+    requestAnimationFrame(() => {
+      shotLine.style.transition = "stroke-dashoffset 0.13s ease-out";
+      shotLine.style.strokeDashoffset = "0";
+
+      /* 2. After shot arrives → spokes bloom (200ms stagger) */
+      setTimeout(() => {
+        node.style.transition = "opacity 0.1s";
+        node.style.opacity    = "1";
+
+        spokeEls.forEach(({ el, segLen }, i) => {
+          el.style.transition      = `stroke-dashoffset ${260 + i * 18}ms cubic-bezier(.2,.8,.4,1)`;
+          el.style.strokeDashoffset = "0";
+        });
+
+        /* 3. Rings appear one by one as spokes extend */
+        ringEls.forEach((el, r) => {
+          setTimeout(() => {
+            el.style.transition = "opacity 0.22s ease";
+            el.style.opacity    = "1";
+          }, 80 + r * 70);
+        });
+      }, 110);
+
+      /* 4. Whole web fades out */
+      setTimeout(() => { svg.style.opacity = "0"; }, 1050);
+      setTimeout(() => svg.remove(), 1650);
+    });
   });
+
 
   // ─── THREE.JS SCENE ───
   const canvas = document.getElementById("bg-canvas");
