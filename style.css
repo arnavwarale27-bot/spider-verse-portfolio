@@ -39,29 +39,40 @@ body {
 a { color: inherit; text-decoration: none; cursor: none; }
 button { cursor: none; }
 
-/* ══════ CURSOR ══════ */
+/* ══════ CURSOR — Spider-Man Theme ══════ */
 #cursor-dot {
   position: fixed; top: 0; left: 0;
-  width: 10px; height: 10px;
+  width: 12px; height: 12px;
   background: var(--movie-primary);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%,-50%);
-  mix-blend-mode: difference;
-  transition: background .3s;
+  box-shadow: 0 0 8px var(--movie-primary), 0 0 16px rgba(211,47,47,.5);
+  animation: cursorPulse 1.8s ease-in-out infinite;
+  transition: background .3s, width .2s, height .2s;
+}
+#cursor-dot.hover { width: 8px; height: 8px; }
+@keyframes cursorPulse {
+  0%,100% { box-shadow: 0 0 6px var(--movie-primary), 0 0 14px rgba(211,47,47,.4); }
+  50%      { box-shadow: 0 0 12px var(--movie-primary), 0 0 28px rgba(211,47,47,.7); }
 }
 #cursor-ring {
   position: fixed; top: 0; left: 0;
-  width: 40px; height: 40px;
-  border: 2px solid #2196F3;
+  width: 36px; height: 36px;
+  border: 2px solid rgba(211,47,47,.6);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%,-50%);
-  transition: width .25s, height .25s, border-color .3s;
+  animation: ringBreath 2.4s ease-in-out infinite;
+  transition: width .3s ease, height .3s ease, border-color .3s;
 }
-#cursor-ring.hover { width: 60px; height: 60px; border-color: var(--movie-primary); }
+@keyframes ringBreath {
+  0%,100% { border-color: rgba(211,47,47,.6); transform: translate(-50%,-50%) scale(1); }
+  50%      { border-color: rgba(211,47,47,.9); transform: translate(-50%,-50%) scale(1.12); }
+}
+#cursor-ring.hover { width: 56px; height: 56px; border-color: var(--movie-primary); animation: none; }
 
 /* ══════ LOADER ══════ */
 #loader {
@@ -512,17 +523,8 @@ button { cursor: none; }
 
 /* ── MOVIE SPIDER-MAN THEME (About) ── */
 .name-highlight {
-  color: var(--movie-primary);
-  text-shadow: 0 0 15px rgba(211,47,47,.5), 0 0 30px rgba(21,101,192,.3);
-  position: relative;
-}
-.name-highlight::after {
-  content: '';
-  position: absolute;
-  bottom: -2px; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--movie-primary), var(--movie-secondary));
-  border-radius: 2px;
+  font-size: 1.15em;
+  display: inline-block;
 }
 .page-movie .page-tag { color: var(--movie-primary); border: 1px solid var(--movie-primary); }
 .page-movie .glitch::before { color: var(--movie-primary); }
