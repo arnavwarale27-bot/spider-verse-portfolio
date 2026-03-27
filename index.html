@@ -17,48 +17,98 @@
     <p class="loader-text">LOADING SPIDER-VERSE…</p>
   </div>
 
-  <!-- ══════ CUSTOM CURSOR — Animated Spider ══════ -->
+  <!-- ══════ CUSTOM CURSOR — 3D Animated Spider ══════ -->
   <div id="spider-cursor">
-    <svg id="spider-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-      <!-- Web thread trail -->
-      <line id="web-thread" x1="40" y1="10" x2="40" y2="-20" stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-dasharray="3 3"/>
+    <svg id="spider-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <defs>
+        <!-- 3D abdomen gradient -->
+        <radialGradient id="abdGrad" cx="38%" cy="32%" r="62%">
+          <stop offset="0%"  stop-color="#5c0000"/>
+          <stop offset="45%" stop-color="#2a0000"/>
+          <stop offset="100%" stop-color="#0d0000"/>
+        </radialGradient>
+        <!-- 3D thorax gradient -->
+        <radialGradient id="thorGrad" cx="35%" cy="28%" r="65%">
+          <stop offset="0%"  stop-color="#3d0000"/>
+          <stop offset="50%" stop-color="#1a0000"/>
+          <stop offset="100%" stop-color="#080000"/>
+        </radialGradient>
+        <!-- Hourglass gradient -->
+        <linearGradient id="hourGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#FF1744"/>
+          <stop offset="100%" stop-color="#B71C1C"/>
+        </linearGradient>
+        <!-- Leg gradient -->
+        <linearGradient id="legGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"  stop-color="#D32F2F"/>
+          <stop offset="100%" stop-color="#7f0000"/>
+        </linearGradient>
+        <!-- Drop shadow filter for 3D depth -->
+        <filter id="spiderShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="2" dy="3" stdDeviation="2.5" flood-color="rgba(0,0,0,0.7)"/>
+        </filter>
+        <!-- Eye glow filter -->
+        <filter id="eyeGlowFilter">
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
 
-      <!-- Left legs (L1=front to L4=back) -->
-      <g class="leg-group left-legs">
-        <line class="leg l1" x1="33" y1="34" x2="10" y2="18" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg l2" x1="31" y1="39" x2="6"  y2="33" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg l3" x1="31" y1="46" x2="6"  y2="50" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg l4" x1="33" y1="52" x2="11" y2="64" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Web thread -->
+      <line id="web-thread" x1="40" y1="12" x2="40" y2="-18"
+        stroke="rgba(220,220,255,0.4)" stroke-width="1.2" stroke-dasharray="4 3"/>
+
+      <!-- Legs with gradient stroke and bent joints -->
+      <g filter="url(#spiderShadow)">
+        <!-- Left legs -->
+        <g class="leg-group left-legs">
+          <polyline class="leg l1" points="33,34 20,22 8,14" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg l2" points="31,40 16,36 4,30" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg l3" points="31,47 15,50 3,54" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg l4" points="33,53 20,62 10,72" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- Right legs -->
+        <g class="leg-group right-legs">
+          <polyline class="leg r1" points="47,34 60,22 72,14" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg r2" points="49,40 64,36 76,30" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg r3" points="49,47 65,50 77,54" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="leg r4" points="47,53 60,62 70,72" fill="none" stroke="url(#legGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
       </g>
 
-      <!-- Right legs -->
-      <g class="leg-group right-legs">
-        <line class="leg r1" x1="47" y1="34" x2="70" y2="18" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg r2" x1="49" y1="39" x2="74" y2="33" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg r3" x1="49" y1="46" x2="74" y2="50" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
-        <line class="leg r4" x1="47" y1="52" x2="69" y2="64" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Abdomen — 3D sphere-like -->
+      <ellipse cx="40" cy="52" rx="10.5" ry="13.5" fill="url(#abdGrad)" stroke="#D32F2F" stroke-width="1.2"
+        filter="url(#spiderShadow)"/>
+      <!-- Abdomen specular highlight -->
+      <ellipse cx="37" cy="45" rx="3.5" ry="2" fill="rgba(255,100,100,0.18)" transform="rotate(-20,37,45)"/>
+      <!-- Hourglass mark -->
+      <path d="M37 47 L43 47 L40 52 L43 57 L37 57 L40 52 Z" fill="url(#hourGrad)" opacity="0.85"/>
+
+      <!-- Cephalothorax — 3D -->
+      <ellipse cx="40" cy="36" rx="8.5" ry="9.5" fill="url(#thorGrad)" stroke="#C62828" stroke-width="1.2"
+        filter="url(#spiderShadow)"/>
+      <!-- Thorax specular highlight -->
+      <ellipse cx="37.5" cy="31" rx="3" ry="1.8" fill="rgba(255,80,80,0.15)" transform="rotate(-15,37.5,31)"/>
+      <!-- Fang marks (chelicerae nubs) -->
+      <ellipse cx="38.5" cy="27.5" rx="1.2" ry="1.5" fill="#8c0000"/>
+      <ellipse cx="41.5" cy="27.5" rx="1.2" ry="1.5" fill="#8c0000"/>
+
+      <!-- Eyes — 8 glowing eyes -->
+      <g filter="url(#eyeGlowFilter)">
+        <circle class="eye" cx="36" cy="32.5" r="1.8" fill="#FF1744"/>
+        <circle class="eye" cx="40" cy="31.2" r="1.6" fill="#FF5252"/>
+        <circle class="eye" cx="44" cy="32.5" r="1.8" fill="#FF1744"/>
+        <circle class="eye" cx="37.5" cy="35" r="1.1" fill="#FF8A80"/>
+        <circle class="eye" cx="42.5" cy="35" r="1.1" fill="#FF8A80"/>
+        <!-- Tiny eye shine -->
+        <circle cx="35.5" cy="32" r="0.5" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="43.5" cy="32" r="0.5" fill="rgba(255,255,255,0.6)"/>
       </g>
-
-      <!-- Abdomen (back body) -->
-      <ellipse cx="40" cy="52" rx="10" ry="13" fill="#1a0000" stroke="#D32F2F" stroke-width="1.4"/>
-      <!-- Abdomen red hourglass marking -->
-      <path d="M36 47 L44 47 L40 52 L44 57 L36 57 L40 52 Z" fill="#D32F2F" opacity="0.7"/>
-
-      <!-- Cephalothorax (front body) -->
-      <ellipse cx="40" cy="36" rx="8" ry="9" fill="#0d0000" stroke="#D32F2F" stroke-width="1.4"/>
-
-      <!-- Eyes (4 pairs — spider has 8 eyes) -->
-      <circle cx="36.5" cy="32" r="1.5" fill="#FF1744"/>
-      <circle cx="40"   cy="31" r="1.5" fill="#FF5252"/>
-      <circle cx="43.5" cy="32" r="1.5" fill="#FF1744"/>
-      <circle cx="38"   cy="34.5" r="1" fill="#FF8A80"/>
-      <circle cx="42"   cy="34.5" r="1" fill="#FF8A80"/>
-
-      <!-- Eye glow -->
-      <circle cx="36.5" cy="32" r="2.5" fill="rgba(255,23,68,0.25)"/>
-      <circle cx="43.5" cy="32" r="2.5" fill="rgba(255,23,68,0.25)"/>
     </svg>
   </div>
+
+  <!-- ══════ CLICK BURST ══════ -->
+  <div id="click-burst-container"></div>
 
   <!-- ══════ THREE.JS CANVAS ══════ -->
   <canvas id="bg-canvas"></canvas>
@@ -94,18 +144,17 @@
     </div>
   </div>
 
-  <!-- ══════ JOURNEY TRANSITION — CINEMATIC SPIDER-MAN ══════ -->
+  <!-- ══════ JOURNEY TRANSITION — SIMPLE & COOL ══════ -->
   <div id="journey" class="hidden">
     <!-- Glitch overlay -->
     <div class="j-glitch" id="j-glitch"></div>
 
-    <!-- Phase 1: Spider symbol -->
+    <!-- Phase 1: Spider symbol drops in -->
     <div class="j-phase j-spider-phase" id="j-spider-phase">
       <div class="spider-symbol" id="spider-symbol">
         <svg viewBox="0 0 100 100" class="spider-svg">
           <ellipse cx="50" cy="42" rx="12" ry="16" fill="currentColor"/>
           <ellipse cx="50" cy="62" rx="16" ry="20" fill="currentColor"/>
-          <!-- Legs -->
           <path d="M38 38 Q20 20 5 15" stroke="currentColor" stroke-width="2.5" fill="none"/>
           <path d="M62 38 Q80 20 95 15" stroke="currentColor" stroke-width="2.5" fill="none"/>
           <path d="M36 45 Q15 40 2 35" stroke="currentColor" stroke-width="2.5" fill="none"/>
@@ -118,46 +167,60 @@
       </div>
     </div>
 
-    <!-- Phase 2: THWIP + web lines -->
-    <div class="j-phase j-thwip-phase" id="j-thwip-phase">
-      <div class="thwip-text" id="thwip-text">THWIP!</div>
-      <div class="web-lines-container" id="web-lines-container">
-        <div class="web-line wl-1"></div>
-        <div class="web-line wl-2"></div>
-        <div class="web-line wl-3"></div>
-        <div class="web-line wl-4"></div>
-        <div class="web-line wl-5"></div>
-      </div>
-    </div>
-
-    <!-- Phase 3: Quote -->
+    <!-- Phase 2: Quote -->
     <div class="j-phase j-quote-phase" id="j-quote-phase">
       <p class="j-quote-line jq-1">"With great power</p>
       <p class="j-quote-line jq-2">comes great responsibility."</p>
     </div>
 
-    <!-- Phase 4: Quick cut flashes -->
-    <div class="j-flash-cuts" id="j-flash-cuts">
-      <div class="flash-cut fc-1"><span>🕷️</span></div>
-      <div class="flash-cut fc-2"><span>🕸️</span></div>
-      <div class="flash-cut fc-3"><span>⚡</span></div>
-    </div>
-
-    <!-- Phase 5: Name reveal -->
+    <!-- Phase 3: Name reveal -->
     <div class="j-phase j-name-phase" id="j-name-phase">
       <p class="j-name-tag">A SPIDER-VERSE EXPERIENCE</p>
       <h1 class="j-name glitch" data-text="ARNAV MOHANIRAJ WARALE">ARNAV MOHANIRAJ WARALE</h1>
       <p class="j-name-sub">REACT DEVELOPER · PUNE, INDIA</p>
     </div>
 
-    <!-- Final whiteout -->
+    <!-- Final dark fade -->
     <div class="journey-whiteout" id="journey-whiteout"></div>
   </div>
 
   <!-- ══════ NAVIGATION ══════ -->
   <nav id="main-nav" class="hidden">
     <div class="nav-inner">
-      <span class="nav-logo">AMW</span>
+      <!-- Spider-Verse Logo -->
+      <a class="nav-logo" href="#" aria-label="AMW Home">
+        <svg id="nav-logo-svg" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" width="48" height="48">
+          <defs>
+            <radialGradient id="shieldGrad" cx="40%" cy="30%" r="70%">
+              <stop offset="0%"  stop-color="#FF5252"/>
+              <stop offset="50%" stop-color="#D32F2F"/>
+              <stop offset="100%" stop-color="#7f0000"/>
+            </radialGradient>
+            <linearGradient id="shieldStroke" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF8A80"/>
+              <stop offset="100%" stop-color="#B71C1C"/>
+            </linearGradient>
+          </defs>
+          <!-- Shield shape -->
+          <path d="M28 4 L50 14 L50 30 Q50 44 28 54 Q6 44 6 30 L6 14 Z"
+            fill="url(#shieldGrad)" stroke="url(#shieldStroke)" stroke-width="1.5"/>
+          <!-- Inner shield edge -->
+          <path d="M28 9 L45 17 L45 30 Q45 41 28 49 Q11 41 11 30 L11 17 Z"
+            fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <!-- Spider body on shield -->
+          <ellipse cx="28" cy="26" rx="4" ry="5.5" fill="white" opacity="0.92"/>
+          <ellipse cx="28" cy="35" rx="5.5" ry="7" fill="white" opacity="0.92"/>
+          <!-- Spider legs -->
+          <line x1="24" y1="25" x2="14" y2="19" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="23" y1="28" x2="12" y2="27" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="23" y1="32" x2="13" y2="36" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="32" y1="25" x2="42" y2="19" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="33" y1="28" x2="44" y2="27" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <line x1="33" y1="32" x2="43" y2="36" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+          <!-- Highlight gloss -->
+          <ellipse cx="24" cy="18" rx="5" ry="3" fill="rgba(255,255,255,0.15)" transform="rotate(-20,24,18)"/>
+        </svg>
+      </a>
       <div class="nav-links">
         <button class="nav-btn active" data-page="about">
           <span class="nav-icon">🕷️</span> About

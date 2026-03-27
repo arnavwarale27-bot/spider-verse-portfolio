@@ -378,26 +378,85 @@ button { cursor: none; }
   100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
-/* ── Phase 4: Quick-Cut Flashes ── */
-.j-flash-cuts {
+/* ── Dark fade out ── */
+.journey-whiteout {
   position: absolute; inset: 0;
-  z-index: 8;
-  opacity: 0;
+  background: black; opacity: 0; z-index: 30;
+  pointer-events: none;
 }
-.j-flash-cuts.active { opacity: 1; }
-.flash-cut {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 6rem;
-  opacity: 0;
+.journey-whiteout.flash {
+  animation: darkFadeOut .9s ease forwards;
 }
-.j-flash-cuts.active .fc-1 { animation: flashCut .2s ease forwards; background: rgba(211,47,47,.15); }
-.j-flash-cuts.active .fc-2 { animation: flashCut .2s .2s ease forwards; background: rgba(123,31,162,.15); }
-.j-flash-cuts.active .fc-3 { animation: flashCut .2s .4s ease forwards; background: rgba(255,23,68,.15); }
-@keyframes flashCut {
-  0%   { opacity: 1; transform: scale(1); }
-  50%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.2); }
+@keyframes darkFadeOut {
+  0%   { opacity: 0; }
+  40%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ══════ CLICK BURST ══════ */
+#click-burst-container {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 99997;
+}
+.click-burst {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+/* Expanding ring */
+.cb-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 10px; height: 10px;
+  border: 2px solid #FF1744;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: cbRing .55s ease-out forwards;
+}
+.cb-ring-2 {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 6px; height: 6px;
+  border: 1.5px solid rgba(255,234,0,.8);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: cbRing .7s .06s ease-out forwards;
+}
+@keyframes cbRing {
+  0%   { width: 0; height: 0; opacity: 1; }
+  80%  { opacity: .6; }
+  100% { width: 90px; height: 90px; opacity: 0; }
+}
+/* 8 radial web rays */
+.cb-ray {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 36px; height: 2px;
+  background: linear-gradient(90deg, rgba(211,47,47,.9), transparent);
+  transform-origin: 0 50%;
+  border-radius: 2px;
+  animation: cbRay .45s ease-out forwards;
+}
+@keyframes cbRay {
+  0%   { width: 0; opacity: 1; }
+  60%  { opacity: .8; }
+  100% { width: 44px; opacity: 0; }
+}
+/* Center dot pop */
+.cb-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 8px; height: 8px;
+  background: #FF1744;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(1px);
+  animation: cbDot .4s ease-out forwards;
+}
+@keyframes cbDot {
+  0%   { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(3.5); opacity: 0; }
 }
 
 /* ── Phase 5: Name Reveal ── */
@@ -449,20 +508,7 @@ button { cursor: none; }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* ── Whiteout flash ── */
-.journey-whiteout {
-  position: absolute; inset: 0;
-  background: white; opacity: 0; z-index: 30;
-  pointer-events: none;
-}
-.journey-whiteout.flash {
-  animation: whiteFlash .7s ease forwards;
-}
-@keyframes whiteFlash {
-  0%  { opacity: 0; }
-  25% { opacity: .95; }
-  100%{ opacity: 0; }
-}
+
 
 /* ══════ NAVIGATION ══════ */
 #main-nav {
@@ -480,11 +526,15 @@ button { cursor: none; }
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo {
-  font-family: 'Bangers', cursive;
-  font-size: 1.6rem; letter-spacing: 4px;
-  background: linear-gradient(90deg, var(--movie-primary), #2196F3);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform .3s ease, filter .3s ease;
+  filter: drop-shadow(0 0 6px rgba(211,47,47,.4));
+}
+.nav-logo:hover {
+  transform: rotate(10deg) scale(1.12);
+  filter: drop-shadow(0 0 14px rgba(255,23,68,.8));
 }
 .nav-links { display: flex; gap: 6px; }
 .nav-btn {

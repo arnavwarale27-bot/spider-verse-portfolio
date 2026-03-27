@@ -67,7 +67,36 @@
   }
   bindHover();
 
+  // ─── CLICK BURST ───
+  const clickBurstContainer = document.getElementById("click-burst-container");
+  window.addEventListener("click", (e) => {
+    const burst = document.createElement("div");
+    burst.className = "click-burst";
+    burst.style.left = e.clientX + "px";
+    burst.style.top  = e.clientY + "px";
 
+    // 2 expanding rings
+    const ring1 = document.createElement("div"); ring1.className = "cb-ring";
+    const ring2 = document.createElement("div"); ring2.className = "cb-ring-2";
+    // Center dot
+    const dot = document.createElement("div"); dot.className = "cb-dot";
+    burst.appendChild(ring1);
+    burst.appendChild(ring2);
+    burst.appendChild(dot);
+
+    // 8 web rays at equal angles
+    for (let i = 0; i < 8; i++) {
+      const ray = document.createElement("div");
+      ray.className = "cb-ray";
+      ray.style.transform = `translate(-0%, -50%) rotate(${i * 45}deg)`;
+      ray.style.animationDelay = (i * 0.025) + "s";
+      burst.appendChild(ray);
+    }
+
+    clickBurstContainer.appendChild(burst);
+    // Remove after animation
+    setTimeout(() => burst.remove(), 800);
+  });
 
   // ─── THREE.JS SCENE ───
   const canvas = document.getElementById("bg-canvas");
@@ -274,67 +303,47 @@
 
     const jGlitch     = document.getElementById("j-glitch");
     const spiderPhase = document.getElementById("j-spider-phase");
-    const thwipPhase  = document.getElementById("j-thwip-phase");
     const quotePhase  = document.getElementById("j-quote-phase");
-    const flashCuts   = document.getElementById("j-flash-cuts");
     const namePhase   = document.getElementById("j-name-phase");
     const whiteout    = document.getElementById("journey-whiteout");
 
-    // ── Phase 1 (0ms): Spider symbol fades in + glitch
+    // Phase 1 (0ms): Spider glows in
     jGlitch.classList.add("active");
     spiderPhase.classList.add("active");
 
-    // ── Phase 2 (2000ms): Spider fades → THWIP! + web lines
+    // Phase 2 (1800ms): Spider fades out → Quote appears
     setTimeout(() => {
       spiderPhase.classList.add("fadeout");
       spiderPhase.classList.remove("active");
-    }, 2000);
-
-    setTimeout(() => {
-      thwipPhase.classList.add("active");
       jGlitch.classList.remove("active");
-    }, 2300);
-
-    // ── Phase 3 (3500ms): THWIP fades → Quote appears
-    setTimeout(() => {
-      thwipPhase.classList.add("fadeout");
-      thwipPhase.classList.remove("active");
-    }, 3500);
+    }, 1800);
 
     setTimeout(() => {
       quotePhase.classList.add("active");
-    }, 3800);
+    }, 2000);
 
-    // ── Phase 4 (6000ms): Quote fades → rapid flash cuts
+    // Phase 3 (4200ms): Quote fades → Name reveal
     setTimeout(() => {
       quotePhase.classList.add("fadeout");
       quotePhase.classList.remove("active");
-    }, 5800);
+    }, 4000);
 
     setTimeout(() => {
-      flashCuts.classList.add("active");
-      jGlitch.classList.add("active");
-    }, 6100);
-
-    // ── Phase 5 (7000ms): Flash cuts end → Name reveal
-    setTimeout(() => {
-      flashCuts.classList.remove("active");
-      jGlitch.classList.remove("active");
       namePhase.classList.add("active");
-    }, 7000);
+    }, 4200);
 
-    // ── Phase 6 (9000ms): Whiteout flash
+    // Phase 4 (6000ms): Dark fade out
     setTimeout(() => {
       whiteout.classList.add("flash");
-    }, 9200);
+    }, 5800);
 
-    // ── Phase 7 (9500ms): Show main site
+    // Phase 5 (6800ms): Show main site
     setTimeout(() => {
       journey.classList.add("hidden");
       mainNav.classList.remove("hidden");
       footer.classList.remove("hidden");
       document.getElementById("page-about").classList.add("active");
-    }, 9800);
+    }, 6800);
   }
 
   // ─── PAGE NAVIGATION ───
