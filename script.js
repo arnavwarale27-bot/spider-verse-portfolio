@@ -441,6 +441,48 @@
     }, 6500);
   }
 
+  // ─── NAV LOGO CLICK: VENOM + SPIDER-SENSE ───
+  const navLogo = document.querySelector(".nav-logo");
+  const venomOverlay = document.getElementById("venom-overlay");
+
+  if (navLogo && venomOverlay) {
+    navLogo.addEventListener("click", (e) => {
+      e.preventDefault();
+      // Prevent rapid double-clicks
+      if (document.body.classList.contains("venom-active")) return;
+
+      // 1. Spider-Sense Glitch/Flash
+      document.body.classList.add("spider-sense-active");
+
+      // Shockwave ring centered on the logo
+      const ring = document.createElement("div");
+      ring.className = "sense-ring";
+      // Position relative to the logo container
+      navLogo.appendChild(ring);
+
+      setTimeout(() => ring.remove(), 700);
+
+      // 2. Venom Drops Down
+      setTimeout(() => {
+        venomOverlay.classList.add("active");
+        document.body.classList.add("venom-active");
+
+        // Force particles to venom colors temporarily
+        colorParticles(themes.skills);
+      }, 300);
+
+      // 3. Venom retracts and returns to normal
+      setTimeout(() => {
+        venomOverlay.classList.remove("active");
+        document.body.classList.remove("venom-active");
+        document.body.classList.remove("spider-sense-active");
+
+        // Restore particles to whatever the active page is
+        colorParticles(themes[activePage]);
+      }, 2500);
+    });
+  }
+
   // ─── PAGE NAVIGATION ───
   const navBtns = document.querySelectorAll(".nav-btn");
   const pages = document.querySelectorAll(".page");
