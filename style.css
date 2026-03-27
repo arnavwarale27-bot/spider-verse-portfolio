@@ -505,7 +505,7 @@ body.spider-sense-active {
   position: fixed;
   top: 0; left: 50%;
   transform: translate(-50%, -100%);
-  width: 200px; height: 350px;
+  width: 400px; height: 600px; /* Much larger container */
   z-index: 9999;
   pointer-events: none;
   display: flex;
@@ -514,25 +514,25 @@ body.spider-sense-active {
   transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy spring effect */
 }
 .spider-drop-container.active {
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -5%); /* Drop him in fully */
 }
 .spider-web-line {
-  width: 2px;
-  height: 150px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
-  box-shadow: 0 0 4px rgba(255,255,255,0.5);
+  width: 3px;
+  height: 250px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 100%);
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
 }
-.spider-drop-svg {
-  width: 140px;
+.spider-drop-img {
+  width: 320px; /* Big movie-style character */
   height: auto;
-  margin-top: -10px; /* overlap web line slightly */
-  filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
-  animation: spideySwing 3s ease-in-out infinite alternate;
+  margin-top: -20px; /* overlap web line slightly */
+  filter: drop-shadow(0 25px 25px rgba(0,0,0,0.7)); /* Realistic deep shadow */
+  animation: spideySwing 3.5s ease-in-out infinite alternate;
   transform-origin: top center;
 }
 @keyframes spideySwing {
-  0% { transform: rotate(-3deg); }
-  100% { transform: rotate(3deg); }
+  0% { transform: rotate(-4deg); }
+  100% { transform: rotate(4deg); }
 }
 
 /* ══════ PAGES ══════ */
