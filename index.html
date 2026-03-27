@@ -17,9 +17,48 @@
     <p class="loader-text">LOADING SPIDER-VERSE…</p>
   </div>
 
-  <!-- ══════ CUSTOM CURSOR ══════ -->
-  <div id="cursor-dot"></div>
-  <div id="cursor-ring"></div>
+  <!-- ══════ CUSTOM CURSOR — Animated Spider ══════ -->
+  <div id="spider-cursor">
+    <svg id="spider-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <!-- Web thread trail -->
+      <line id="web-thread" x1="40" y1="10" x2="40" y2="-20" stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-dasharray="3 3"/>
+
+      <!-- Left legs (L1=front to L4=back) -->
+      <g class="leg-group left-legs">
+        <line class="leg l1" x1="33" y1="34" x2="10" y2="18" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg l2" x1="31" y1="39" x2="6"  y2="33" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg l3" x1="31" y1="46" x2="6"  y2="50" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg l4" x1="33" y1="52" x2="11" y2="64" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+
+      <!-- Right legs -->
+      <g class="leg-group right-legs">
+        <line class="leg r1" x1="47" y1="34" x2="70" y2="18" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg r2" x1="49" y1="39" x2="74" y2="33" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg r3" x1="49" y1="46" x2="74" y2="50" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line class="leg r4" x1="47" y1="52" x2="69" y2="64" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+
+      <!-- Abdomen (back body) -->
+      <ellipse cx="40" cy="52" rx="10" ry="13" fill="#1a0000" stroke="#D32F2F" stroke-width="1.4"/>
+      <!-- Abdomen red hourglass marking -->
+      <path d="M36 47 L44 47 L40 52 L44 57 L36 57 L40 52 Z" fill="#D32F2F" opacity="0.7"/>
+
+      <!-- Cephalothorax (front body) -->
+      <ellipse cx="40" cy="36" rx="8" ry="9" fill="#0d0000" stroke="#D32F2F" stroke-width="1.4"/>
+
+      <!-- Eyes (4 pairs — spider has 8 eyes) -->
+      <circle cx="36.5" cy="32" r="1.5" fill="#FF1744"/>
+      <circle cx="40"   cy="31" r="1.5" fill="#FF5252"/>
+      <circle cx="43.5" cy="32" r="1.5" fill="#FF1744"/>
+      <circle cx="38"   cy="34.5" r="1" fill="#FF8A80"/>
+      <circle cx="42"   cy="34.5" r="1" fill="#FF8A80"/>
+
+      <!-- Eye glow -->
+      <circle cx="36.5" cy="32" r="2.5" fill="rgba(255,23,68,0.25)"/>
+      <circle cx="43.5" cy="32" r="2.5" fill="rgba(255,23,68,0.25)"/>
+    </svg>
+  </div>
 
   <!-- ══════ THREE.JS CANVAS ══════ -->
   <canvas id="bg-canvas"></canvas>

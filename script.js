@@ -15,16 +15,45 @@
     mouse.ny = -(e.clientY / window.innerHeight) * 2 + 1;
   });
 
-  // ─── CUSTOM CURSOR ───
-  const dot = document.getElementById("cursor-dot");
-  const ring = document.getElementById("cursor-ring");
+  // ─── SPIDER CURSOR ───
+  const spiderCursor = document.getElementById("spider-cursor");
+  const spiderSvg    = document.getElementById("spider-svg");
+  let prevX = 0, prevY = 0;
+  let curX = window.innerWidth / 2, curY = window.innerHeight / 2;
+  let currentAngle = 0;
+
   function animateCursor() {
-    dot.style.left = mouse.x + "px";
-    dot.style.top = mouse.y + "px";
-    const rx = parseFloat(ring.style.left || mouse.x);
-    const ry = parseFloat(ring.style.top || mouse.y);
-    ring.style.left = rx + (mouse.x - rx) * 0.15 + "px";
-    ring.style.top = ry + (mouse.y - ry) * 0.15 + "px";
+    // Smooth follow
+    curX += (mouse.x - curX) * 0.18;
+    curY += (mouse.y - curY) * 0.18;
+
+    const dx = mouse.x - prevX;
+    const dy = mouse.y - prevY;
+    const speed = Math.sqrt(dx * dx + dy * dy);
+
+    // Rotate spider toward direction of travel (offset 90° because SVG points up)
+    if (speed > 1.5) {
+      const targetAngle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+      // Smooth shortest-path angle interpolation
+      let diff = targetAngle - currentAngle;
+      while (diff > 180) diff -= 360;
+      while (diff < -180) diff += 360;
+      currentAngle += diff * 0.12;
+    }
+
+    // Speed class — legs pump faster + brighter glow
+    if (speed > 8) {
+      spiderCursor.classList.add("fast");
+    } else {
+      spiderCursor.classList.remove("fast");
+    }
+
+    spiderCursor.style.left = curX + "px";
+    spiderCursor.style.top  = curY + "px";
+    spiderCursor.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+
+    prevX = mouse.x;
+    prevY = mouse.y;
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
@@ -32,11 +61,13 @@
   // Hover effect on interactive elements
   function bindHover() {
     document.querySelectorAll("a, button, .btn, .contact-card, .skill-pill, .stat-card, .ach-card").forEach((el) => {
-      el.addEventListener("mouseenter", () => ring.classList.add("hover"));
-      el.addEventListener("mouseleave", () => ring.classList.remove("hover"));
+      el.addEventListener("mouseenter", () => spiderCursor.classList.add("hover-item"));
+      el.addEventListener("mouseleave", () => spiderCursor.classList.remove("hover-item"));
     });
   }
   bindHover();
+
+
 
   // ─── THREE.JS SCENE ───
   const canvas = document.getElementById("bg-canvas");
@@ -338,8 +369,6 @@
       // Change theme colors
       const tc = themeColors[target];
       setWebColor(tc.web);
-      dot.style.background = tc.dot;
-      ring.style.borderColor = tc.ring;
 
       // Change particle colors
       colorParticles(themes[target]);
