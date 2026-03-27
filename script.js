@@ -399,49 +399,46 @@
   function startJourney() {
     journey.classList.remove("hidden");
 
-    const jGlitch     = document.getElementById("j-glitch");
     const spiderPhase = document.getElementById("j-spider-phase");
     const quotePhase  = document.getElementById("j-quote-phase");
     const namePhase   = document.getElementById("j-name-phase");
     const whiteout    = document.getElementById("journey-whiteout");
 
-    // Phase 1 (0ms): Spider glows in
-    jGlitch.classList.add("active");
+    // Phase 1 — Spider fades in gently
     spiderPhase.classList.add("active");
 
-    // Phase 2 (1800ms): Spider fades out → Quote appears
+    // Phase 2 — Spider fades out, quote slides up
     setTimeout(() => {
       spiderPhase.classList.add("fadeout");
       spiderPhase.classList.remove("active");
-      jGlitch.classList.remove("active");
     }, 1800);
 
     setTimeout(() => {
       quotePhase.classList.add("active");
-    }, 2000);
+    }, 2100);
 
-    // Phase 3 (4200ms): Quote fades → Name reveal
+    // Phase 3 — Quote fades out, name fades in
     setTimeout(() => {
       quotePhase.classList.add("fadeout");
       quotePhase.classList.remove("active");
-    }, 4000);
+    }, 3800);
 
     setTimeout(() => {
       namePhase.classList.add("active");
-    }, 4200);
+    }, 4100);
 
-    // Phase 4 (6000ms): Dark fade out
+    // Phase 4 — Dark fade covers everything
     setTimeout(() => {
       whiteout.classList.add("flash");
-    }, 5800);
+    }, 5600);
 
-    // Phase 5 (6800ms): Show main site
+    // Phase 5 — Reveal main site
     setTimeout(() => {
       journey.classList.add("hidden");
       mainNav.classList.remove("hidden");
       footer.classList.remove("hidden");
       document.getElementById("page-about").classList.add("active");
-    }, 6800);
+    }, 6500);
   }
 
   // ─── PAGE NAVIGATION ───
