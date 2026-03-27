@@ -441,45 +441,37 @@
     }, 6500);
   }
 
-  // ─── NAV LOGO CLICK: VENOM + SPIDER-SENSE ───
+  // ─── NAV LOGO CLICK: SPIDER-SENSE & SPIDER-MAN DROP ───
   const navLogo = document.querySelector(".nav-logo");
-  const venomOverlay = document.getElementById("venom-overlay");
+  const spiderDrop = document.getElementById("spider-drop-container");
 
-  if (navLogo && venomOverlay) {
+  if (navLogo && spiderDrop) {
     navLogo.addEventListener("click", (e) => {
       e.preventDefault();
-      // Prevent rapid double-clicks
-      if (document.body.classList.contains("venom-active")) return;
+      // Prevent rapid double-clicks (check if he's currently active)
+      if (spiderDrop.classList.contains("active")) return;
 
-      // 1. Spider-Sense Glitch/Flash
+      // 1. Spider-Sense Glitch/Flash (Invert & shake screen)
       document.body.classList.add("spider-sense-active");
 
       // Shockwave ring centered on the logo
+      const rect = navLogo.getBoundingClientRect();
       const ring = document.createElement("div");
       ring.className = "sense-ring";
-      // Position relative to the logo container
       navLogo.appendChild(ring);
 
       setTimeout(() => ring.remove(), 700);
 
-      // 2. Venom Drops Down
+      // 2. Spider-Man Drops Down
       setTimeout(() => {
-        venomOverlay.classList.add("active");
-        document.body.classList.add("venom-active");
-
-        // Force particles to venom colors temporarily
-        colorParticles(themes.skills);
+        spiderDrop.classList.add("active");
       }, 300);
 
-      // 3. Venom retracts and returns to normal
+      // 3. Spider-Man Retreats & Flash Ends
       setTimeout(() => {
-        venomOverlay.classList.remove("active");
-        document.body.classList.remove("venom-active");
+        spiderDrop.classList.remove("active");
         document.body.classList.remove("spider-sense-active");
-
-        // Restore particles to whatever the active page is
-        colorParticles(themes[activePage]);
-      }, 2500);
+      }, 2500); // Hangs there for ~2.5 seconds
     });
   }
 

@@ -500,36 +500,39 @@ body.spider-sense-active {
   100% { width: 300vw; height: 300vw; opacity: 0; border-width: 1px; border-color: #D32F2F; }
 }
 
-/* 2. Venom Corruption */
-.venom-overlay {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: 0;
-  background: var(--venom-dark);
+/* 2. Spider-Man Drop */
+.spider-drop-container {
+  position: fixed;
+  top: 0; left: 50%;
+  transform: translate(-50%, -100%);
+  width: 200px; height: 350px;
   z-index: 9999;
   pointer-events: none;
-  overflow: hidden;
-  transition: height 1s cubic-bezier(0.7, 0, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy spring effect */
 }
-.venom-overlay.active {
-  height: 100vh;
+.spider-drop-container.active {
+  transform: translate(-50%, 0);
 }
-.venom-goo {
-  position: absolute;
-  bottom: -40px;
-  width: 100%; height: 60px;
-  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 20" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 L100,0 L100,5 Q90,20 80,5 T60,5 T40,15 T20,5 T0,10 Z" fill="%230a0a0f"/></svg>') repeat-x;
-  background-size: 150px 100%;
-  animation: gooDrip 2s infinite linear alternate;
+.spider-web-line {
+  width: 2px;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
+  box-shadow: 0 0 4px rgba(255,255,255,0.5);
 }
-@keyframes gooDrip {
-  0% { transform: scaleY(1); }
-  100% { transform: scaleY(1.8); }
+.spider-drop-svg {
+  width: 140px;
+  height: auto;
+  margin-top: -10px; /* overlap web line slightly */
+  filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));
+  animation: spideySwing 3s ease-in-out infinite alternate;
+  transform-origin: top center;
 }
-/* When venom is active, override variables temporarily */
-body.venom-active {
-  --movie-primary: var(--venom-primary);
-  --movie-secondary: var(--venom-secondary);
-  --movie-accent: var(--venom-accent);
+@keyframes spideySwing {
+  0% { transform: rotate(-3deg); }
+  100% { transform: rotate(3deg); }
 }
 
 /* ══════ PAGES ══════ */
